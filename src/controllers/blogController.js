@@ -2,13 +2,6 @@ const mongoose = require("mongoose")
 const authorModel = require("../models/authorModel")
 const blogModel = require("../models/blogModel")
 
-//---------------------------------------------------------------//
-
-//..............2....POST /blogs API.............................//
-
-//...............................................................//
-
-
 const createBlog = async function (req, res) {
     try {
         let data = req.body
@@ -50,14 +43,6 @@ const createBlog = async function (req, res) {
     }
 }
 
-
-//---------------------------------------------------------------//
-
-//.........3....GET /blogs APi...................................//
-
-//---------------------------------------------------------------//
-
-
 const getBlogs = async function (req, res) {
     try {
         if (req.query.authorId) {
@@ -66,7 +51,6 @@ const getBlogs = async function (req, res) {
         }
 
         let blogFound = await blogModel.find(req.query);
-        console.log(blogFound)
         let len = blogFound.length;
         let arr = [];
 
@@ -85,12 +69,6 @@ const getBlogs = async function (req, res) {
         res.status(500).send({ status: false, error: error.message })
     }
 }
-//...............................................................//
-
-//.................4...PUT /blogs/:blogId...API.................//
-
-//..............................................................//
-
 
 const update = async function (req, res) {
     try {
@@ -98,14 +76,14 @@ const update = async function (req, res) {
         let blogId = req.params.blogId
 
         if(Object.keys(data).length==0)
-        return res.status(404).send({ msg: "No data for Update ⚠️" })
+            return res.status(404).send({ msg: "No data for Update ⚠️" })
 
         if(!mongoose.isValidObjectId(blogId))
-        return res.status(400).send({ Status: false, message: "Please enter valid blogId ⚠️" })
+            return res.status(400).send({ Status: false, message: "Please enter valid blogId ⚠️" })
 
         let findblog = await blogModel.findById(blogId)
         if (!findblog)
-            return res.status(404).send({ msg: "blogId  is invalid ⚠️" })
+            return res.status(404).send({ msg: "blogId is invalid ⚠️" })
 
         if (findblog.authorId._id.toString() !== req.authorId)
             return res.status(401).send({ Status: false, message: "Authorisation Failed ⚠️" })
@@ -129,20 +107,11 @@ const update = async function (req, res) {
             }, { new: true, upsert: true })
             return res.status(200).send({ status: true, msg: updatedBlog })
         }
-
     }
     catch (error) {
         res.status(500).send({ status: false, error: error.message })
     }
 }
-
-
-//---------------------------------------------------------------//
-
-//....5......DELETE /blogs/:blogId API..........................//
-
-//...............................................................//
-
 
 const deleteByBlogId = async function (req, res) {
     try {
@@ -172,14 +141,6 @@ const deleteByBlogId = async function (req, res) {
         res.status(500).send({ status: false, error: error.message })
     }
 }
-
-
-//---------------------------------------------------------------//
-
-//.....6..........DELETE /blogs?queryParams....API............//
-
-//...............................................................//
-
 
 const deleteByQuery = async function (req, res) {
     try {
@@ -221,9 +182,4 @@ const deleteByQuery = async function (req, res) {
         res.status(500).send({ status: false, error: error.message })
     }
 }
-
-//...............................................................//
-
 module.exports = { createBlog, getBlogs, update, deleteByBlogId, deleteByQuery }
-
-//---------------------------------------------------------------//

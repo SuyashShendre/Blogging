@@ -1,21 +1,11 @@
 const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken");
 
-
-//------------------------regex---------------------------//
-
 let nameRegex = /^[a-zA-Z]{1,20}$/
 
 let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 
 let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-
-//---------------------------------------------------------------//
-
-//...1...Create Author APi.......................................//
-
-//---------------------------------------------------------------//
-
 
 module.exports.createAuthor = async function (req, res) {
     try {
@@ -76,12 +66,6 @@ module.exports.createAuthor = async function (req, res) {
   }
 }
 
-
-//......................................................................//
-
-//....7..API for login................................................. //
-
-
 module.exports.login = async function (req, res) {
   try {
     let email = req.body.email;
@@ -102,12 +86,9 @@ module.exports.login = async function (req, res) {
         msg: "username or the password is not corerct 🛑",
       });
 
-    let token = jwt.sign(
-      {
-        authorId: author._id
-      },
-
-      process.env.SECRET_KEY
+    let token = jwt.sign({ 
+      authorId: author._id 
+    }, process.env.SECRET_KEY
     );
 
     res.setHeader("x-api-key", token);
@@ -118,6 +99,3 @@ module.exports.login = async function (req, res) {
     res.status(500).send({ status: false, error: error.message })
   }
 }
-
-
-//---------------------------------------------------------------//
